@@ -1,0 +1,27 @@
+{
+  "name": "default",
+  "appName": "Eureka School",
+  "navbar": {
+    "defaultImg": "https://www.svgrepo.com/show/509009/avatar-thinking-3.svg"
+  },
+  "hero": {
+    "title": "Fastest Road To Full Stack"
+  },
+  "sidebarMenus": [
+    {
+      "icon": "https://www.svgrepo.com/show/449959/users.svg",
+      "href": "/admin/users",
+      "label": "Users"
+    },
+    {
+      "icon": "https://www.svgrepo.com/show/449960/user-shield.svg",
+      "href": "/admin/roles",
+      "label": "Roles"
+    },
+    {
+      "icon": "https://www.svgrepo.com/show/449684/cloud-upload.svg",
+      "href": "/admin/uploads",
+      "label": "Uploads"
+    }
+  ]
+}
