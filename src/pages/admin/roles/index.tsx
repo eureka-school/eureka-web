@@ -1,5 +1,6 @@
 import AdminLayout from "@/components/layouts/admin";
 import prisma from "@/lib/prisma";
+import Link from "next/link";
 
 export async function getServerSideProps({}) {
   const docs = await prisma.role.findMany({});
@@ -21,7 +22,12 @@ export default function Page({ docs }: { docs: [] }) {
               <th></th>
               <th>Name</th>
               <th>
-                <button className="btn btn-xs btn-primary">Create</button>
+                <Link
+                  href="/admin/roles/create"
+                  className="btn btn-xs btn-primary"
+                >
+                  Create
+                </Link>
               </th>
             </tr>
           </thead>
@@ -29,15 +35,15 @@ export default function Page({ docs }: { docs: [] }) {
             {/* row 1 */}
             {docs.map(({ id, name }, idx) => (
               <tr key={`role-${idx}`}>
-                <th>{idx}</th>
+                <th>{idx + 1}</th>
                 <td>{name}</td>
                 <td>
-                  <a
+                  <Link
                     className="btn btn-xs btn-primary"
                     href={`/admin/roles/${id}`}
                   >
                     Edit
-                  </a>
+                  </Link>
                 </td>
               </tr>
             ))}

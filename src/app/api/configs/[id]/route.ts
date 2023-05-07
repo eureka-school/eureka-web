@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
+import { ObjectId } from "mongodb";
 
 export async function GET(
   req: NextRequest,
@@ -29,11 +30,10 @@ export async function PUT(
   const col = client.db("eureka-school").collection("configs");
   const id = params.id;
   const body = await req.json();
-  const { name } = body;
 
-  const doc = await col.updateOne(
+  const doc = await col.replaceOne(
     { name: id },
-    { ...body, updatedAt: new Date() }
+    { ...body, updatedAt: new Date(), _id: new ObjectId(body._id) }
   );
 
   return NextResponse.json({ success: true, data: doc });

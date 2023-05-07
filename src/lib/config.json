@@ -1,13 +1,30 @@
 {
+  "_id": "645774b28a285d6dab42ee95",
   "name": "default",
   "appName": "Eureka School",
   "navbar": {
     "defaultImg": "https://www.svgrepo.com/show/509009/avatar-thinking-3.svg"
   },
   "hero": {
-    "title": "Fastest Road To Full Stack"
+    "title": "Fastest Road To Full Stack",
+    "backgroundImage": "https://eureka-school.s3.us-east-005.backblazeb2.com/undraw_code_thinking.svg",
+    "buttons": [
+      {
+        "label": "Labs",
+        "href": "/labs"
+      },
+      {
+        "label": "alterclass",
+        "href": "https://eureka.alterclass.school"
+      }
+    ]
   },
   "sidebarMenus": [
+    {
+      "icon": "https://www.svgrepo.com/show/449685/cog.svg",
+      "href": "/admin/configs",
+      "label": "Configs"
+    },
     {
       "icon": "https://www.svgrepo.com/show/449959/users.svg",
       "href": "/admin/users",
@@ -23,5 +40,7 @@
       "href": "/admin/uploads",
       "label": "Uploads"
     }
-  ]
+  ],
+  "createdAt": "2023-05-07T09:51:46.656Z",
+  "updatedAt": "2023-05-07T10:01:32.289Z"
 }

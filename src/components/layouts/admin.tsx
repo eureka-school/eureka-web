@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import MainLayout from "./main";
+import Sidebar from "@/components/layouts/sidebar";
 
 const menu = [
   {
@@ -29,16 +30,7 @@ export default function AdminLayout({
       <div className="p-10 bg-base-200 text-primary-content">
         <div className="flex flex-row gap-5">
           <div className="flex flex-col">
-            <ul className="menu bg-base-100 w-42 min-h-[70vh] p-2 rounded-box">
-              {menu.map(({ icon, label, href }, idx) => (
-                <li key={`menu-${idx}`}>
-                  <a href={href}>
-                    <Image src={icon} alt={label} width={24} height={24} />
-                    {label}
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <Sidebar />
           </div>
           <div className="flex flex-1">{children}</div>
         </div>

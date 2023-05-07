@@ -1,12 +1,16 @@
 import AdminLayout from "@/components/layouts/admin";
-import prisma from "@/lib/prisma";
+import { serialize } from "@/lib/helper";
+
 import clientPromise from "@/lib/mongodb";
+import Link from "next/link";
 
 export async function getServerSideProps({}) {
   const client = await clientPromise;
-  const docs = await prisma.role.findMany({});
+  const col = client.db("eureka-school").collection("configs");
+  const docs = await col.find().toArray();
+
   return {
-    props: { docs }, // will be passed to the page component as props
+    props: { docs: serialize(docs) }, // will be passed to the page component as props
   };
 }
 
@@ -22,24 +26,33 @@ export default function Page({ docs }: { docs: [] }) {
             <tr>
               <th></th>
               <th>Name</th>
+              <th></th>
+              <th></th>
               <th>
-                <button className="btn btn-xs btn-primary">Create</button>
+                <Link
+                  href="/admin/configs/create"
+                  className="btn btn-xs btn-primary"
+                >
+                  Create
+                </Link>
               </th>
             </tr>
           </thead>
           <tbody>
             {/* row 1 */}
-            {docs.map(({ id, name }, idx) => (
+            {docs.map(({ id, name, createdAt, updatedAt }, idx) => (
               <tr key={`role-${idx}`}>
-                <th>{idx}</th>
+                <th>{idx + 1}</th>
                 <td>{name}</td>
+                <td>{createdAt}</td>
+                <td>{updatedAt}</td>
                 <td>
-                  <a
+                  <Link
                     className="btn btn-xs btn-primary"
-                    href={`/admin/roles/${id}`}
+                    href={`/admin/configs/${name}`}
                   >
                     Edit
-                  </a>
+                  </Link>
                 </td>
               </tr>
             ))}

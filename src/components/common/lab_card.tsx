@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 interface Props {
   title: string;
@@ -17,9 +18,9 @@ export default function LabCard({ title, subtitle, href, src }: Props) {
         <h2 className="card-title">{title}</h2>
         <p>{subtitle}</p>
         <div className="card-actions justify-end">
-          <a href={href} className="btn btn-primary">
+          <Link href={href} className="btn btn-primary">
             Enter
-          </a>
+          </Link>
         </div>
       </div>
     </div>

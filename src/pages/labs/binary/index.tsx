@@ -27,7 +27,8 @@ export default function Page() {
 
   const inNumber = lights.reduce((prevVal, curVal, curIdx) => {
     if (curVal) {
-      const result = curIdx === 0 ? 128 : prevVal + 2 ** (num - curIdx - 1);
+      const result =
+        curIdx === 0 ? 2 ** (num - 1) : prevVal + 2 ** (num - curIdx - 1);
       return result;
     }
     return prevVal;
