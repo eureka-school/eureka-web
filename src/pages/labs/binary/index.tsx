@@ -72,6 +72,7 @@ export default function Page() {
           <p className="text-2xl font-clock text-center my-5">
             <span className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content w-12 mx-auto items-center">
               <span className="countdown font-mono text-2xl">
+                {/* @ts-ignore */}
                 <span style={{ "--value": num }}></span>
               </span>
             </span>
@@ -103,6 +104,7 @@ export default function Page() {
         <div className="max-w-6xl mx-auto my-10 grid grid-cols-8 gap-5">
           {lights.map((light, idx) => (
             <button
+              key={`lightbulb-${idx}`}
               onClick={() => {
                 const newLights = [...lights];
                 newLights[idx] = !lights[idx];

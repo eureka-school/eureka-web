@@ -2,6 +2,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import defaultConfig from "@/lib/config.json";
 import Image from "next/image";
 import useSWR from "swr";
+import Link from "next/link";
 
 interface TemplateProps {
   config: any;
@@ -11,7 +12,7 @@ interface TemplateProps {
 const Template = ({ config, session, user }: TemplateProps) => (
   <div className="navbar bg-base-100 text-primary-content shadow-lg px-10">
     <div className="flex-1">
-      <a className="normal-case text-xl" href="/">
+      <Link className="normal-case text-xl" href="/">
         <Image
           className="inline-block rounded-full"
           alt="logo"
@@ -23,7 +24,7 @@ const Template = ({ config, session, user }: TemplateProps) => (
           priority
         />
         <span className="ml-2">{config.appName}</span>
-      </a>
+      </Link>
     </div>
     <div className="flex-none gap-2">
       <div className="form-control">

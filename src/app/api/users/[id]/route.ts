@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-export const userSelect = {
+const userSelect = {
   username: true,
   role: {
     select: {

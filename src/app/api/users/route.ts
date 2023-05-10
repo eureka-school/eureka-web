@@ -2,25 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { hash } from "bcrypt";
 
-export const userSelect = {
-  username: true,
-  role: {
-    select: {
-      name: true,
-    },
-  },
-  profile: {
-    select: {
-      name: true,
-      avatar: true,
-      phone: true,
-      email: true,
-      created_at: true,
-      updated_at: true,
-    },
-  },
-};
-
 export async function GET(req: NextRequest) {
   const docs = await prisma.user.findMany({
     // select: userSelect,
