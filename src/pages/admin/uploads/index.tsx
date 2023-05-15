@@ -10,7 +10,7 @@ export async function getServerSideProps({}) {
   const col = client.db("eureka-school").collection("uploads");
   const docs = await col.find().toArray();
   return {
-    props: { docs: serialize(docs), base_url: process.env.NEXTAUTH_URL }, // will be passed to the page component as props
+    props: { docs: serialize(docs), base_url: process.env.BUCKET_BASE_URL }, // will be passed to the page component as props
   };
 }
 
@@ -21,8 +21,6 @@ export default function Page({
   docs: [];
   base_url: string;
 }) {
-  console.log(docs);
-
   const uploadHandler = (data: any) => {
     toast.success("Successfully uploaded!");
   };
@@ -49,15 +47,15 @@ export default function Page({
               <tr key={`role-${idx}`}>
                 <th>{idx + 1}</th>
                 <td>
-                  <a href={`${base_url}/api/v2/uploads/${_id}`} target="_blank">
+                  <a href={`${base_url}/${Key}`} target="_blank">
                     {Key}
                   </a>
                 </td>
                 <td>
                   <Image
-                    src={`${base_url}/api/v2/uploads/${_id}`}
+                    src={`${base_url}/${Key}`}
                     alt={Key}
-                    width={128}
+                    width={256}
                     height={64}
                   />
                 </td>
@@ -66,7 +64,7 @@ export default function Page({
                     className="btn btn-xs btn-primary"
                     onClick={() => {
                       navigator.clipboard.writeText(
-                        `${base_url}/api/v2/uploads/${_id}`
+                        `${base_url}/${Key}`
                       );
                       toast.success("Copied to the clipboard!");
                     }}

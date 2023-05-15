@@ -1,32 +1,21 @@
-import Image from "next/image";
 import React from "react";
 import MainLayout from "./main";
 import Sidebar from "@/components/layouts/sidebar";
 
-const menu = [
-  {
-    icon: "https://www.svgrepo.com/show/449959/users.svg",
-    href: "/admin/users",
-    label: "Users",
-  },
-  {
-    icon: "https://www.svgrepo.com/show/449960/user-shield.svg",
-    href: "/admin/roles",
-    label: "Roles",
-  },
-  {
-    icon: "https://www.svgrepo.com/show/449684/cloud-upload.svg",
-    href: "/admin/uploads",
-    label: "Uploads",
-  },
-];
+import defaultConfig from "@/lib/config.json";
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const metadata = {
+    description: defaultConfig.description,
+    image: defaultConfig.hero.backgroundImage,
+    title: "Admin Portal",
+    twitterCard: defaultConfig.hero.backgroundImage,
+  };
   return (
-    <MainLayout>
+    <MainLayout metadata={metadata}>
       <div className="p-10 bg-base-200 text-primary-content">
         <div className="flex flex-row gap-5">
           <div className="flex flex-col">

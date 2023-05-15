@@ -52,7 +52,6 @@ export default function EditConfig({
     const json = await res.json();
     if (json.success) {
       toast.success(create ? "Successfully created!" : "Successfully updated!");
-      console.log("toast");
     }
     setLoading(false);
   };

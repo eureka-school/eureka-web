@@ -1,5 +1,6 @@
 import LabCard from "@/components/common/lab_card";
 import MainLayout from "@/components/layouts/main";
+import defaultConfig from "@/lib/config.json";
 
 const labs = [
   {
@@ -28,8 +29,14 @@ const labs = [
   },
 ];
 export default function Page() {
+  const metadata = {
+    description: defaultConfig.description,
+    image: defaultConfig.hero.backgroundImage,
+    title: "Labs",
+    twitterCard: defaultConfig.hero.backgroundImage,
+  };
   return (
-    <MainLayout>
+    <MainLayout metadata={metadata}>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 justify-center py-10">
         {labs.map(({ title, subtitle, href, src }, idx) => (
           <LabCard

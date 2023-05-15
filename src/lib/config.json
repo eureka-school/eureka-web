@@ -2,6 +2,7 @@
   "_id": "645774b28a285d6dab42ee95",
   "name": "default",
   "appName": "Eureka School",
+  "description": "Fastest road to full stack!",
   "navbar": {
     "defaultImg": "https://www.svgrepo.com/show/509009/avatar-thinking-3.svg"
   },
@@ -42,5 +43,5 @@
     }
   ],
   "createdAt": "2023-05-07T09:51:46.656Z",
-  "updatedAt": "2023-05-07T10:01:32.289Z"
+  "updatedAt": "2023-05-07T12:43:20.208Z"
 }

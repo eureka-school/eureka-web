@@ -1,6 +1,7 @@
 import MainLayout from "@/components/layouts/main";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import defaultConfig from "@/lib/config.json";
 
 export async function getStaticProps({}) {
   return {
@@ -31,23 +32,21 @@ export default function Page({ wsUrl }: { wsUrl: string }) {
 
   const initializeWebsocket = () => {
     socket = new WebSocket(`${wsUrl}/ws/eureka/binary`, ["wss"]);
-    console.log("socket setup", wsUrl);
 
     // Set up event listeners
     socket.addEventListener("open", () => {
-      console.log("Connected to WebSocket server");
+      // console.log("Connected to WebSocket server");
     });
 
     socket.addEventListener("message", (event) => {
       const message = event.data;
       const res = JSON.parse(message);
-      console.log(res);
       setNum(res.num);
       setLights(res.lights);
     });
 
     socket.addEventListener("close", () => {
-      console.log("Disconnected from WebSocket server");
+      // console.log("Disconnected from WebSocket server");
     });
 
     if (socket && socket.readyState === socket.OPEN) {
@@ -92,34 +91,33 @@ export default function Page({ wsUrl }: { wsUrl: string }) {
   }, 0);
 
   const inBinary = lights.map((v) => (v ? "1" : "0")).join(" ");
+  const metadata = {
+    description: "Learn how data are made up of zeros and ones",
+    image: defaultConfig.hero.backgroundImage,
+    title: "Binary Labs",
+    twitterCard: defaultConfig.hero.backgroundImage,
+  };
   return (
-    <MainLayout>
+    <MainLayout metadata={metadata}>
       <link
         href="https://fonts.googleapis.com/css?family=Orbitron"
         rel="stylesheet"
         type="text/css"
       />
 
-      <div className="overflow-x-auto mx-10">
-        <table className="table max-w-lg mx-auto my-10">
-          <tbody>
-            <tr>
-              <th>In ASCII</th>
-              <td className="font-clock font-semibold">
-                {String.fromCharCode(inNumber)}
-              </td>
-            </tr>
-
-            <tr>
-              <th>In Number</th>
-              <td className="font-clock font-semibold">{inNumber}</td>
-            </tr>
-            <tr>
-              <th>In Binary</th>
-              <td className="font-clock font-semibold">{inBinary}</td>
-            </tr>
-          </tbody>
-        </table>
+      <div className="overflow-x-auto md:mx-10 mx-5">
+        <div className="card card-body bg-base-100 mt-5">
+          <div className="grid grid-cols-2 gap-3">
+            <span>In ASCII</span>
+            <span className="font-clock font-semibold">
+              {String.fromCharCode(inNumber)}
+            </span>
+            <span>In Number</span>
+            <span className="font-clock font-semibold">{inNumber}</span>
+            <span>In Binary</span>
+            <span className="font-clock font-semibold">{inBinary}</span>
+          </div>
+        </div>
 
         <div className="mx-auto max-w-xl my-10">
           <p className="text-2xl font-clock text-center my-5">
@@ -152,7 +150,7 @@ export default function Page({ wsUrl }: { wsUrl: string }) {
             <span>32</span>
           </div>
         </div>
-        <div className="max-w-6xl mx-auto my-10 grid grid-cols-8 gap-5">
+        <div className="max-w-6xl mx-auto my-10 grid grid-cols-4 md:grid-cols-8 gap-5">
           {lights.map((light, idx) => (
             <button
               key={`lightbulb-${idx}`}

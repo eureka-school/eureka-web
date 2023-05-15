@@ -1,14 +1,16 @@
-import Image from "next/image";
-import { Inter } from "next/font/google";
 import MainLayout from "@/components/layouts/main";
 import Hero from "@/components/views/hero";
-import Dropzone from "@/components/common/dropzone";
-
-const inter = Inter({ subsets: ["latin"] });
+import defaultConfig from "@/lib/config.json";
 
 export default function Home() {
+  const metadata = {
+    description: defaultConfig.description,
+    image: defaultConfig.hero.backgroundImage,
+    title: defaultConfig.appName,
+    twitterCard: defaultConfig.hero.backgroundImage,
+  };
   return (
-    <MainLayout>
+    <MainLayout metadata={metadata}>
       <Hero />
     </MainLayout>
   );
