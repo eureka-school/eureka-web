@@ -18,6 +18,7 @@ const LightBulb = ({ on }: { on: boolean }) => (
         : "https://eureka-school.s3.us-east-005.backblazeb2.com/light-off.png"
     }
     alt={on ? "light-on" : "light-off"}
+    priority={true}
   />
 );
 
