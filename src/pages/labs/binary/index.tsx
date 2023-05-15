@@ -2,6 +2,8 @@ import MainLayout from "@/components/layouts/main";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import defaultConfig from "@/lib/config.json";
+import { findPermutations } from "@/lib/helper";
+import { Discovery } from "aws-sdk";
 
 export async function getStaticProps({}) {
   return {
@@ -28,6 +30,7 @@ export default function Page({ wsUrl }: { wsUrl: string }) {
   const [num, setNum] = useState(1);
   const [lights, setLights] = useState([false]);
   const [audio, setAudio] = useState<any>(null);
+  const [showPermutations, setShowPermutations] = useState(true);
   const initialized = useRef(false);
 
   const initializeWebsocket = () => {
@@ -97,6 +100,8 @@ export default function Page({ wsUrl }: { wsUrl: string }) {
     title: "Binary Labs",
     twitterCard: defaultConfig.hero.backgroundImage,
   };
+
+  const possiblePermutations = findPermutations(num);
   return (
     <MainLayout metadata={metadata}>
       <link
@@ -106,7 +111,7 @@ export default function Page({ wsUrl }: { wsUrl: string }) {
       />
 
       <div className="overflow-x-auto md:mx-10 mx-5">
-        <div className="card card-body bg-base-100 mt-5">
+        <div className="card card-body bg-base-100 mt-5 max-w-4xl mx-auto">
           <div className="grid grid-cols-2 gap-3">
             <span>In ASCII</span>
             <span className="font-clock font-semibold">
@@ -165,6 +170,27 @@ export default function Page({ wsUrl }: { wsUrl: string }) {
             </button>
           ))}
         </div>
+        <div className="form-control max-w-xl mx-auto">
+          <label className="label cursor-pointer">
+            <span className="label-text">Show Possible Permutations</span>
+            <input
+              type="checkbox"
+              className="toggle"
+              checked={showPermutations}
+              onChange={() => setShowPermutations(!showPermutations)}
+            />
+          </label>
+        </div>
+        {showPermutations && (
+          <div className="text-center my-5">
+            {possiblePermutations.map((arr, idx) => (
+              <div>
+                <span className="mr-5 font-semibold">{idx + 1}.</span>
+                {arr.join(" ")}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </MainLayout>
   );
