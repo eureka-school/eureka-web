@@ -38,13 +38,7 @@ const Template = ({ config, session, user }: TemplateProps) => (
         <div className="dropdown dropdown-end">
           <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
             <div className="w-10 rounded-full">
-              <img
-                src={
-                  user.profile.avatar
-                    ? user.profile.avatar
-                    : config.navbar.defaultImg
-                }
-              />
+              <img src={user.avatar ? user.avatar : config.navbar.defaultImg} />
             </div>
           </label>
           <ul
@@ -91,7 +85,7 @@ const Template = ({ config, session, user }: TemplateProps) => (
 export default function Navbar() {
   const { data: session } = useSession();
   const user = session?.user as any;
-  const { data: configResponse, isLoading } = useSWR("/api/configs/default");
+  const { data: configResponse, isLoading } = useSWR("/api/v2/configs/default");
 
   if (isLoading) {
     return <Template config={defaultConfig} user={user} session={session} />;

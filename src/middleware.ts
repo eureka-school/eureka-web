@@ -11,9 +11,9 @@ export async function middleware(req: NextRequest) {
     secret: process.env.NEXTAUTH_SECRET,
   })) as any;
 
-  const role = session ? session.user.role.name : "";
+  const role = session ? session.user.role : "";
   if (split[1] === "admin" || split[1] === "ap") {
-    if (!session || role !== "admin") {
+    if (!session || role.level > 2) {
       return NextResponse.redirect(new URL("/", req.url));
     }
   }

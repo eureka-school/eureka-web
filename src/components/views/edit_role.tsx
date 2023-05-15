@@ -17,9 +17,8 @@ export default function EditRole({
   const onSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
-    console.log("submit", data);
 
-    const url = create ? `/api/roles` : `/api/roles/${data.id}`;
+    const url = create ? `/api/v2/roles` : `/api/v2/roles/${data._id}`;
     const options = {
       method: create ? "POST" : "PUT",
       body: JSON.stringify(data),
@@ -28,7 +27,6 @@ export default function EditRole({
     const json = await res.json();
     if (json.success) {
       toast.success(create ? "Successfully created!" : "Successfully updated!");
-      console.log("toast");
 
       setData(json.data);
     }
@@ -44,6 +42,14 @@ export default function EditRole({
             placeholder="admin"
             onChange={(e) => {
               setData({ ...data, name: e.target.value });
+            }}
+          />
+          <Input
+            label="Name"
+            value={data.level}
+            placeholder="0"
+            onChange={(e) => {
+              setData({ ...data, level: e.target.value });
             }}
           />
           <div className="text-center">

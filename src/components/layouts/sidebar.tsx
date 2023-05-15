@@ -21,7 +21,7 @@ const Template = ({ menu }: TemplateProps) => (
 );
 
 export default function Sidebar() {
-  const { data: configResponse, isLoading } = useSWR("/api/configs/default");
+  const { data: configResponse, isLoading } = useSWR("/api/v2/configs/default");
 
   if (isLoading) {
     return <Template menu={defaultConfig.sidebarMenus} />;

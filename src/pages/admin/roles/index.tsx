@@ -1,17 +1,19 @@
 import AdminLayout from "@/components/layouts/admin";
+import { serialize } from "@/lib/helper";
+import clientPromise from "@/lib/mongodb";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 
 export async function getServerSideProps({}) {
-  const docs = await prisma.role.findMany({});
+  const client = await clientPromise;
+  const col = client.db("eureka-school").collection("roles");
+  const docs = await col.find().toArray();
   return {
-    props: { docs }, // will be passed to the page component as props
+    props: { docs: serialize(docs) }, // will be passed to the page component as props
   };
 }
 
 export default function Page({ docs }: { docs: [] }) {
-  console.log(docs);
-
   return (
     <AdminLayout>
       <div className="overflow-x-auto w-full">
@@ -21,6 +23,7 @@ export default function Page({ docs }: { docs: [] }) {
             <tr>
               <th></th>
               <th>Name</th>
+              <th>Level</th>
               <th>
                 <Link
                   href="/admin/roles/create"
@@ -33,14 +36,15 @@ export default function Page({ docs }: { docs: [] }) {
           </thead>
           <tbody>
             {/* row 1 */}
-            {docs.map(({ id, name }, idx) => (
+            {docs.map(({ _id, name, level }, idx) => (
               <tr key={`role-${idx}`}>
                 <th>{idx + 1}</th>
                 <td>{name}</td>
+                <td>{level}</td>
                 <td>
                   <Link
                     className="btn btn-xs btn-primary"
-                    href={`/admin/roles/${id}`}
+                    href={`/admin/roles/${_id}`}
                   >
                     Edit
                   </Link>

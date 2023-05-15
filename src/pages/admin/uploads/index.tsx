@@ -1,54 +1,61 @@
+import Dropzone from "@/components/common/dropzone";
 import AdminLayout from "@/components/layouts/admin";
-import { serialize } from "@/lib/helper";
-import s3 from "@/lib/s3";
+import { serialize, uploadLocation } from "@/lib/helper";
+import clientPromise from "@/lib/mongodb";
 import Image from "next/image";
 import toast from "react-hot-toast";
 
 export async function getServerSideProps({}) {
-  const params = {
-    Bucket: process.env.BUCKET_NAME,
-  };
-  const res = await s3.listObjects(params).promise();
-  console.log(res.Contents);
-
+  const client = await clientPromise;
+  const col = client.db("eureka-school").collection("uploads");
+  const docs = await col.find().toArray();
   return {
-    props: { docs: serialize(res.Contents ? res.Contents : []) }, // will be passed to the page component as props
+    props: { docs: serialize(docs), base_url: process.env.NEXTAUTH_URL }, // will be passed to the page component as props
   };
 }
 
-export default function Page({ docs }: { docs: [] }) {
+export default function Page({
+  docs,
+  base_url,
+}: {
+  docs: [];
+  base_url: string;
+}) {
   console.log(docs);
+
+  const uploadHandler = (data: any) => {
+    toast.success("Successfully uploaded!");
+  };
 
   return (
     <AdminLayout>
       <div className="overflow-x-auto w-full">
+        <div className="text-center">
+          <p className="text-bold">Upload</p>
+          <Dropzone uploadHandler={uploadHandler} />
+        </div>
         <table className="table w-full">
           {/* head */}
           <thead>
             <tr>
               <th></th>
-              <th>Name</th>
-              <th>
-                <button className="btn btn-xs btn-primary">Create</button>
-              </th>
+              <th>Key</th>
+              <th>Image</th>
             </tr>
           </thead>
           <tbody>
             {/* row 1 */}
-            {docs.map(({ id, Key }, idx) => (
+            {docs.map(({ _id, Key }, idx) => (
               <tr key={`role-${idx}`}>
                 <th>{idx + 1}</th>
                 <td>
-                  <a
-                    href={`https://eureka-school.s3.us-east-005.backblazeb2.com/${Key}`}
-                    target="_blank" 
-                  >
+                  <a href={`${base_url}/api/v2/uploads/${_id}`} target="_blank">
                     {Key}
                   </a>
                 </td>
                 <td>
                   <Image
-                    src={`https://eureka-school.s3.us-east-005.backblazeb2.com/${Key}`}
+                    src={`${base_url}/api/v2/uploads/${_id}`}
                     alt={Key}
                     width={128}
                     height={64}
@@ -59,7 +66,7 @@ export default function Page({ docs }: { docs: [] }) {
                     className="btn btn-xs btn-primary"
                     onClick={() => {
                       navigator.clipboard.writeText(
-                        `https://eureka-school.s3.us-east-005.backblazeb2.com/${Key}`
+                        `${base_url}/api/v2/uploads/${_id}`
                       );
                       toast.success("Copied to the clipboard!");
                     }}

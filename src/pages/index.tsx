@@ -10,11 +10,6 @@ export default function Home() {
   return (
     <MainLayout>
       <Hero />
-      {/* <Dropzone
-        uploadHandler={(data: any) => {
-          console.log("home", data);
-        }}
-      /> */}
     </MainLayout>
   );
 }

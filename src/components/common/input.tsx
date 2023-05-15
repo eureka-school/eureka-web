@@ -1,18 +1,25 @@
 interface Props {
-  value: string;
+  value: any;
   label: string;
   placeholder: string;
   onChange: (e: any) => void;
+  type?: string;
 }
 
-export default function Input({ value, label, placeholder, onChange }: Props) {
+export default function Input({
+  value,
+  label,
+  placeholder,
+  onChange,
+  type = "text",
+}: Props) {
   return (
     <div className="form-control w-full max-w-sm">
       <label className="label">
         <span className="label-text">{label}</span>
       </label>
       <input
-        type="text"
+        type={type}
         placeholder={placeholder}
         value={value}
         onChange={onChange}

@@ -1,6 +1,12 @@
 import MainLayout from "@/components/layouts/main";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+export async function getStaticProps({}) {
+  return {
+    props: { wsUrl: process.env.WSURL }, // will be passed to the page component as props
+  };
+}
 
 const LightBulb = ({ on }: { on: boolean }) => (
   <Image
@@ -15,15 +21,63 @@ const LightBulb = ({ on }: { on: boolean }) => (
   />
 );
 
-export default function Page() {
-  const [num, setNum] = useState(8);
-  const [lights, setLights] = useState(
-    Array.from({ length: num }, (v, i) => false)
-  );
+let socket: WebSocket;
+export default function Page({ wsUrl }: { wsUrl: string }) {
+  const [num, setNum] = useState(1);
+  const [lights, setLights] = useState([false]);
+  const initialized = useRef(false);
 
+  const initializeWebsocket = () => {
+    socket = new WebSocket(`${wsUrl}/ws/eureka/binary`, ["ws"]);
+    console.log("socket setup", wsUrl);
+
+    // Set up event listeners
+    socket.addEventListener("open", () => {
+      console.log("Connected to WebSocket server");
+    });
+
+    socket.addEventListener("message", (event) => {
+      const message = event.data;
+      const res = JSON.parse(message);
+      console.log(res);
+      setNum(res.num);
+      setLights(res.lights);
+    });
+
+    socket.addEventListener("close", () => {
+      console.log("Disconnected from WebSocket server");
+    });
+
+    if (socket && socket.readyState === socket.OPEN) {
+      socket.send(JSON.stringify({ init: true }));
+      // socket.send(JSON.stringify(message));
+    }
+  };
   useEffect(() => {
-    setLights(Array.from({ length: num }, (v, i) => false));
-  }, [num]);
+    if (!initialized.current) {
+      initializeWebsocket();
+      initialized.current = true;
+    }
+
+    return () => {
+      if (socket.readyState === socket.OPEN) {
+        socket.close();
+      }
+    };
+  }, []);
+
+  const sendMessage = (message: any) => {
+    if (socket && socket.readyState === socket.OPEN) {
+      socket.send(JSON.stringify(message));
+    }
+  };
+
+  const onChangeNumber = (e: any) => {
+    sendMessage({
+      num: parseInt(e.target.value),
+      lights: Array.from({ length: e.target.value }, (v, i) => false),
+    });
+  };
 
   const inNumber = lights.reduce((prevVal, curVal, curIdx) => {
     if (curVal) {
@@ -34,11 +88,7 @@ export default function Page() {
     return prevVal;
   }, 0);
 
-  const inBinary = lights.reduce((prevVal, curVal, curIdx) => {
-    const newDigit = curVal ? "1" : "0";
-    const result = prevVal + newDigit;
-    return result;
-  }, "");
+  const inBinary = lights.map((v) => (v ? "1" : "0")).join(" ");
   return (
     <MainLayout>
       <link
@@ -85,9 +135,7 @@ export default function Page() {
             value={num}
             className="range range-primary"
             step="1"
-            onChange={(e: any) => {
-              setNum(parseInt(e.target.value));
-            }}
+            onChange={onChangeNumber}
           />
           <div className="w-full flex justify-between text-xs px-1">
             <span>0</span>
@@ -108,7 +156,7 @@ export default function Page() {
               onClick={() => {
                 const newLights = [...lights];
                 newLights[idx] = !lights[idx];
-                setLights(newLights);
+                sendMessage({ num, lights: newLights });
               }}
             >
               <LightBulb on={light} />

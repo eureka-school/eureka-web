@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import s3 from "@/lib/s3";
+import s3 from "@/lib/legacyS3";
 
 export async function GET(req: NextRequest) {
   const params = {

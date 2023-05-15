@@ -15,8 +15,6 @@ export async function getServerSideProps({}) {
 }
 
 export default function Page({ docs }: { docs: [] }) {
-  console.log(docs);
-
   return (
     <AdminLayout>
       <div className="overflow-x-auto w-full">

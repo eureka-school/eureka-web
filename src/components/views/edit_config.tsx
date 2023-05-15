@@ -36,8 +36,8 @@ export default function EditConfig({
     setLoading(true);
 
     const url = create
-      ? `/api/configs/${doc.name}`
-      : `/api/configs/${doc.name}`;
+      ? `/api/v2/configs/${doc.name}`
+      : `/api/v2/configs/${doc.name}`;
     const parsed = JSON.parse(jsonContent.text);
     const payload = {
       ...parsed,

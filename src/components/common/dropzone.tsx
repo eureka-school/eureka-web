@@ -7,7 +7,7 @@ export default function Dropzone({ uploadHandler }: { uploadHandler: any }) {
       // Do something with the files
       const formData = new FormData();
       formData.append("file", acceptedFiles[0]);
-      const url = "/api/uploads";
+      const url = "/api/v2/uploads";
       const res = await fetch(url, {
         method: "POST",
         body: formData,
@@ -20,7 +20,7 @@ export default function Dropzone({ uploadHandler }: { uploadHandler: any }) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
-    <div {...getRootProps()}>
+    <div {...getRootProps()} className="text-center border-2 border-neutral-400 border-dashed rounded-xl max-w-xl mx-auto p-10 my-3 bg-base-300">
       <input {...getInputProps()} />
       {isDragActive ? (
         <p>Drop the files here ...</p>

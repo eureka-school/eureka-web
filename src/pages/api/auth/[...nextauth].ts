@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 import { compare } from "bcrypt";
 import prisma from "@/lib/prisma";
+import clientPromise from "@/lib/mongodb";
 
 export default NextAuth({
   providers: [
@@ -21,29 +22,52 @@ export default NextAuth({
         if (!username || !password) {
           throw new Error("Missing username or password");
         }
-        const user = await prisma.user.findFirst({
-          where: { username },
-          select: {
-            id: true,
-            username: true,
-            password: true,
-            profile: true,
-            role: true,
-            profile_id: false,
-            role_id: false,
-          },
-        });
+
+        const client = await clientPromise;
+        const col = client.db("eureka-school").collection("users");
+        const user = (
+          await col
+            .aggregate([
+              {
+                $match: { username },
+              },
+              {
+                $lookup: {
+                  from: "roles",
+                  localField: "roleId",
+                  foreignField: "_id",
+                  as: "role",
+                },
+              },
+              {
+                $addFields: {
+                  role: {
+                    $arrayElemAt: ["$role", 0],
+                  },
+                },
+              },
+              {
+                $project: {
+                  username: 1,
+                  password: 1,
+                  role: 1,
+                },
+              },
+              { $limit: 1 },
+            ])
+            .toArray()
+        )[0];
 
         // if user doesn't exist or password doesn't match
         if (!user || !(await compare(password, user.password))) {
           throw new Error("Invalid username or password");
         }
 
-        const { role, profile } = user;
+        const { role } = user;
+
         return {
           username,
           role,
-          profile,
         };
       },
     }),

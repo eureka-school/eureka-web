@@ -35,7 +35,7 @@ const Template = ({ config }: TemplateProps) => (
 );
 
 export default function Hero() {
-  const { data: configResponse, isLoading } = useSWR("/api/configs/default");
+  const { data: configResponse, isLoading } = useSWR("/api/v2/configs/default");
 
   if (isLoading) {
     return <Template config={defaultConfig} />;

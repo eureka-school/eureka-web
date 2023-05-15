@@ -1,38 +1,82 @@
-import pkg from "aws-sdk";
-const { S3 } = pkg;
+import {
+  S3Client,
+  PutObjectCommand,
+  ListObjectsV2Command,
+  GetObjectCommand,
+  DeleteObjectCommand,
+} from "@aws-sdk/client-s3";
 
-const options = {
+const client = new S3Client({
   endpoint: process.env.ENDPOINT,
-  accessKeyId: process.env.APPLICATION_KEY_ID,
-  secretAccessKey: process.env.APPLICATION_KEY,
+  credentials: {
+    accessKeyId: process.env.APPLICATION_KEY_ID || "",
+    secretAccessKey: process.env.APPLICATION_KEY || "",
+  },
+  region: process.env.REGION,
+});
+
+export const upload = async ({
+  Key,
+  Body,
+  ContentType,
+}: {
+  Key: string;
+  Body: any;
+  ContentType: string;
+}) => {
+  try {
+    const command = new PutObjectCommand({
+      Bucket: process.env.BUCKET_NAME,
+      Key: Key,
+      Body: Body,
+      ContentType: ContentType,
+    });
+    const response = await client.send(command);
+    return response;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
 };
 
-declare global {
-  var _s3: any;
-}
-
-class Singleton {
-  private static _instance: Singleton;
-
-  private s3: any;
-  private constructor() {
-    this.s3 = new S3(options);
-    if (process.env.NODE_ENV === "development") {
-      // In development mode, use a global variable so that the value
-      // is preserved across module reloads caused by HMR (Hot Module Replacement).
-      global._s3 = this.s3;
-    }
+export const list = async (MaxKeys?: number) => {
+  try {
+    const command = new ListObjectsV2Command({
+      Bucket: process.env.BUCKET_NAME,
+      MaxKeys: MaxKeys ? MaxKeys : 20,
+    });
+    const response = await client.send(command);
+    return response;
+  } catch (e) {
+    console.log(e);
+    return null;
   }
+};
 
-  public static get instance() {
-    if (!this._instance) {
-      this._instance = new Singleton();
-    }
-    return this._instance.s3;
+export const get = async (Key: string) => {
+  try {
+    const command = new GetObjectCommand({
+      Bucket: process.env.BUCKET_NAME,
+      Key: Key,
+    });
+    const response = await client.send(command);
+    return response;
+  } catch (e) {
+    console.log(e);
+    return null;
   }
-}
-const s3 = Singleton.instance;
+};
 
-// Export a module-scoped MongoClient promise. By doing this in a
-// separate module, the client can be shared across functions.
-export default s3;
+export const remove = async (Key: string) => {
+  try {
+    const command = new DeleteObjectCommand({
+      Bucket: process.env.BUCKET_NAME,
+      Key: Key,
+    });
+    const response = await client.send(command);
+    return response;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};
