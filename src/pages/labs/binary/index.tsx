@@ -25,6 +25,7 @@ let socket: WebSocket;
 export default function Page({ wsUrl }: { wsUrl: string }) {
   const [num, setNum] = useState(1);
   const [lights, setLights] = useState([false]);
+  const [audio, setAudio] = useState<any>(null);
   const initialized = useRef(false);
 
   const initializeWebsocket = () => {
@@ -56,6 +57,7 @@ export default function Page({ wsUrl }: { wsUrl: string }) {
   useEffect(() => {
     if (!initialized.current) {
       initializeWebsocket();
+      setAudio(new Audio("/click-button.mp3"));
       initialized.current = true;
     }
 
@@ -157,6 +159,7 @@ export default function Page({ wsUrl }: { wsUrl: string }) {
                 const newLights = [...lights];
                 newLights[idx] = !lights[idx];
                 sendMessage({ num, lights: newLights });
+                audio.play();
               }}
             >
               <LightBulb on={light} />
