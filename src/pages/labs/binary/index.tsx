@@ -29,7 +29,7 @@ export default function Page({ wsUrl }: { wsUrl: string }) {
   const initialized = useRef(false);
 
   const initializeWebsocket = () => {
-    socket = new WebSocket(`${wsUrl}/ws/eureka/binary`, ["ws"]);
+    socket = new WebSocket(`${wsUrl}/ws/eureka/binary`, ["wss"]);
     console.log("socket setup", wsUrl);
 
     // Set up event listeners
