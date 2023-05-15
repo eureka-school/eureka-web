@@ -184,7 +184,7 @@ export default function Page({ wsUrl }: { wsUrl: string }) {
         {showPermutations && (
           <div className="text-center my-5">
             {possiblePermutations.map((arr, idx) => (
-              <div>
+              <div key={`permutation-${idx}`}>
                 <span className="mr-5 font-semibold">{idx + 1}.</span>
                 {arr.join(" ")}
               </div>
