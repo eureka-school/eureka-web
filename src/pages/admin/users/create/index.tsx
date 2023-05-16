@@ -1,5 +1,5 @@
-import EditRole from "@/components/views/edit_role";
+import EditUser from "@/components/views/edit_user";
 
 export default function Page({ doc }: { doc: any }) {
-  return <EditRole create={true} />;
+  return <EditUser create={true} />;
 }

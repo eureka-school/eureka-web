@@ -14,7 +14,7 @@ export default function Input({
   type = "text",
 }: Props) {
   return (
-    <div className="form-control w-full max-w-sm">
+    <div className="form-control w-full max-w-sm md:max-w-xl">
       <label className="label">
         <span className="label-text">{label}</span>
       </label>

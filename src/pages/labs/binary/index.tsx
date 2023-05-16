@@ -3,7 +3,6 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import defaultConfig from "@/lib/config.json";
 import { findPermutations } from "@/lib/helper";
-import { Discovery } from "aws-sdk";
 
 export async function getStaticProps({}) {
   return {

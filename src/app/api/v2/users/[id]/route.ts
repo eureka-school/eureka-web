@@ -36,6 +36,8 @@ export async function PUT(
   const id = new ObjectId(params.id);
   const body = await req.json();
   const { name, avatar, roleId, phone, email, username } = body;
+  console.log({ id, name, avatar, roleId, phone, email, username });
+
   const doc = await col.updateOne(
     { _id: id },
     {
